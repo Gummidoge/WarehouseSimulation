@@ -142,8 +142,126 @@ public class SimulationTest {
 
         System.out.println("PASS: Battery depletion");
 
-        System.out.println(
-            "\nAll 6 simulation tests passed!"
+        
+        // TEST 7: Multiple robots and tasks
+        TaskManager multiManager = new TaskManager();
+        ArrayList<Robot> multiRobots = new ArrayList<>();
+
+        Robot robotA = new Robot(
+            10, new Coordinate(0, 0)
         );
+        Robot robotB = new Robot(
+            11, new Coordinate(3, 3)
+        );
+
+        multiRobots.add(robotA);
+        multiRobots.add(robotB);
+
+        Task taskA = new Task(
+            10,
+            new Coordinate(1, 1),
+            new Coordinate(2, 2)
+        );
+        Task taskB = new Task(
+            11,
+            new Coordinate(4, 4),
+            new Coordinate(5, 5)
+        );
+
+        multiManager.addTask(taskA);
+        multiManager.addTask(taskB);
+
+        Simulation multiSimulation = new Simulation(
+            warehouse, multiManager, movement, multiRobots
+        );
+
+        multiSimulation.step();
+
+        check("ASSIGNED".equals(taskA.getStatus()),
+              "Task A should be assigned");
+        check("ASSIGNED".equals(taskB.getStatus()),
+              "Task B should be assigned");
+
+        check(robotA.getCurrentTask() == taskA,
+              "Robot A should have task A");
+        check(robotB.getCurrentTask() == taskB,
+              "Robot B should have task B");
+
+        System.out.println("PASS: Multiple task assignment");
+
+        // TEST 8: Independent pickup and delivery
+        robotA.setPosition(new Coordinate(1, 1));
+        multiSimulation.step();
+
+        check("PICKED_UP".equals(taskA.getStatus()),
+              "Task A should be picked up");
+        check("ASSIGNED".equals(taskB.getStatus()),
+              "Task B should still be assigned");
+
+        robotA.setPosition(new Coordinate(2, 2));
+        robotB.setPosition(new Coordinate(4, 4));
+        multiSimulation.step();
+
+        check("COMPLETED".equals(taskA.getStatus()),
+              "Task A should be completed");
+        check("PICKED_UP".equals(taskB.getStatus()),
+              "Task B should be picked up");
+
+        robotB.setPosition(new Coordinate(5, 5));
+        multiSimulation.step();
+
+        check("COMPLETED".equals(taskB.getStatus()),
+              "Task B should be completed");
+
+        check("IDLE".equals(robotA.getStatus())
+              && "IDLE".equals(robotB.getStatus()),
+              "Both robots should be idle");
+
+        System.out.println("PASS: Independent task progression");
+
+        // TEST 9: No battery means no new assignment
+        TaskManager emptyBatteryManager = new TaskManager();
+        ArrayList<Robot> emptyBatteryRobots =
+            new ArrayList<>();
+
+        Robot emptyRobot = new Robot(
+            20, new Coordinate(0, 0)
+        );
+
+        for (int i = 0; i < 100; i++) {
+            emptyRobot.consumeBattery();
+        }
+
+        emptyBatteryRobots.add(emptyRobot);
+
+        Task pendingTask = new Task(
+            20,
+            new Coordinate(1, 1),
+            new Coordinate(2, 2)
+        );
+
+        emptyBatteryManager.addTask(pendingTask);
+
+        Simulation emptyBatterySimulation = new Simulation(
+            warehouse,
+            emptyBatteryManager,
+            movement,
+            emptyBatteryRobots
+        );
+
+        emptyBatterySimulation.step();
+
+        check("PENDING".equals(pendingTask.getStatus()),
+              "Task should remain pending");
+
+        check(emptyRobot.getCurrentTask() == null,
+              "Empty battery robot should not receive a task");
+
+        System.out.println("PASS: No assignment with empty battery");
+
+        System.out.println(
+            "\nAll 9 simulation tests passed!"
+        );
+
     }
 }
