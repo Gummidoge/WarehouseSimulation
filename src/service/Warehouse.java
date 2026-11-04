@@ -48,11 +48,17 @@ public class Warehouse {
 
 
     // Getter - returns the specific tile at the requested coordinate
-    public Tile getTile(Coordinate c){
+    public Tile getTile(Coordinate c) {
+
+        // Coordinate exception check
+        if (c == null) {
+            throw new IllegalArgumentException("Invalid coordinate. It must not be null.");
+        }
+
         int row = c.getRow();
         int col = c.getCol();
 
-        // Exception check
+        // Bounds exception check
         if (row >= rows || col >= cols) {
             throw new IndexOutOfBoundsException("Invalid coordinate - it must be inside the warehouse.");
         }
@@ -77,10 +83,15 @@ public class Warehouse {
     method for adding charging stations, delivery dropoff points, pickup zones, even more walls, etc. 
     Recommended for testing purposes as well. */
     public void setTile(Coordinate c, Tile tile) {
+
+        // Coordinate exception check
+        if (c == null) {
+            throw new IllegalArgumentException("Invalid coordinate. It must not be null.");
+        }
         int row = c.getRow();
         int col = c.getCol();
 
-        // Exception checks
+        // Other exception checks
         if (row >= rows || col >= cols) {
             throw new IndexOutOfBoundsException("Invalid coordinate - it must be inside the warehouse.");
         }
