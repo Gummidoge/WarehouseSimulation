@@ -15,11 +15,16 @@ public class Warehouse {
     private final Tile[][] map;
 
     /* Constructor - creates an empty warehouse (with perimeter walls and floors) of a desired width and length. Must be at
-       least 6x6 in size. We need to give the robots some room to stretch their legs / treads / rotary blades, after all. */
-    public Warehouse(int rows, int cols){
+       least 6x6 in size, and at most 20x20. We need to give the robots some room to stretch their legs / treads / rotary blades, 
+       after all. */
+    public Warehouse(int rows, int cols) {
         if (rows <= 5 || cols <= 5) {
             throw new IllegalArgumentException("Warehouse is too small. 6x6 is the minimum required size.");
         }
+        if (rows >= 21 || cols >= 21) {
+            throw new IllegalArgumentException("Warehouse is too big. 20x20 is the maximum size allowed.");
+        }
+
         this.rows = rows;
         this.cols = cols;
         this.map = new Tile[rows][cols];
@@ -43,9 +48,9 @@ public class Warehouse {
 
 
     // Getter - returns the specific tile at the requested coordinate
-    public Tile getTile(Coordinate coordinate){
-        int row = coordinate.getRow();
-        int col = coordinate.getCol();
+    public Tile getTile(Coordinate c){
+        int row = c.getRow();
+        int col = c.getCol();
 
         // Exception check
         if (row >= rows || col >= cols) {
@@ -71,9 +76,9 @@ public class Warehouse {
     /* Setter - modifies a tile at the chosen coordinate into a new tile type. The bread and butter
     method for adding charging stations, delivery dropoff points, pickup zones, even more walls, etc. 
     Recommended for testing purposes as well. */
-    public void setTile(Coordinate coordinate, Tile tile) {
-        int row = coordinate.getRow();
-        int col = coordinate.getCol();
+    public void setTile(Coordinate c, Tile tile) {
+        int row = c.getRow();
+        int col = c.getCol();
 
         // Exception checks
         if (row >= rows || col >= cols) {
@@ -89,6 +94,38 @@ public class Warehouse {
 
         // Converts the old tile into the desired version. 
         map[row][col] = tile;
+    }
+
+    
+    /* Checker - Confirms that an input coordinate is valid in the warehouse map. Note that negative
+    coordinates are already checked beforehand in the Coordinate class, so this method only 
+    checks for upper bounds. */
+    public boolean isWithinBounds(Coordinate c) {
+
+        // Exception check
+        if (c == null) {
+            throw new IllegalArgumentException("Invalid coordinate - it must not be null.");
+        }
+
+        // Both row and col must be a value less than the warehouse's total rows and total columns 
+        // respectively, since we must account for the zero coordinate positions.
+        int row = c.getRow();
+        int col = c.getCol();
+
+        // returns true if valid, and false otherwise
+        return (row < rows && col < cols);
+    }
+
+
+    // Checker - Confirms that given a specific coordinate, the corresponding warehouse tile is traversable.
+    public boolean isTraversable(Coordinate c) {
+
+        // First, checks if the coordinate can even represent a tile on the warehouse map
+        if (!isWithinBounds(c)) {
+            return false;
+        }
+        // If so, returns whether or not the valid tile is traversable.
+        return map[c.getRow()][c.getCol()].isTraversable();
     }
 
 
