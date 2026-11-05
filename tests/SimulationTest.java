@@ -21,7 +21,7 @@ public class SimulationTest {
 
     public static void main(String[] args) {
 
-        Warehouse warehouse = new Warehouse();
+        Warehouse warehouse = new Warehouse(10, 10);
         TaskManager manager = new TaskManager();
         MovementController movement =
             new MovementController();
