@@ -29,7 +29,7 @@ public class SimulationTest {
         ArrayList<Robot> robots = new ArrayList<>();
 
         Robot robot = new Robot(
-            1, new Coordinate(0, 0)
+            1, new Coordinate(1, 1)
         );
         robots.add(robot);
 
@@ -59,8 +59,8 @@ public class SimulationTest {
         check(simulation.getTickCount() == 1,
               "Tick should be one");
 
-        check("ASSIGNED".equals(task.getStatus()),
-              "Task should be assigned");
+        check("PICKED_UP".equals(task.getStatus()),
+        "Task should be picked up at its starting location");
 
         check(robot.getCurrentTask() == task,
               "Robot should have the assigned task");
@@ -68,17 +68,29 @@ public class SimulationTest {
         System.out.println("PASS: Tick and assignment");
 
         // TEST 3: Pickup
-        robot.setPosition(new Coordinate(1, 1));
-        simulation.step();
-
         check("PICKED_UP".equals(task.getStatus()),
-              "Task should be picked up");
+              "Task should already be picked up");
 
         System.out.println("PASS: Pickup");
 
-        // TEST 4: Delivery
-        robot.setPosition(new Coordinate(2, 2));
-        simulation.step();
+        // TEST 4: Automatic delivery
+        int maxDeliveryTicks = 10;
+
+        while (!"COMPLETED".equals(task.getStatus())
+                && simulation.getTickCount() < maxDeliveryTicks) {
+            simulation.step();
+        }
+
+        check("COMPLETED".equals(task.getStatus()),
+            "Task should be completed");
+
+        check(robot.getPosition().getRow() == 2
+            && robot.getPosition().getCol() == 2,
+            "Robot should reach the delivery location");
+
+        check(robot.getBatteryLevel() == 98,
+            "Robot should consume battery for two movements");
+
 
         check("COMPLETED".equals(task.getStatus()),
               "Task should be completed");
@@ -91,9 +103,6 @@ public class SimulationTest {
 
         check("IDLE".equals(robot.getStatus()),
               "Robot should be idle");
-
-        check(simulation.getTickCount() == 3,
-              "Tick should be three");
 
         System.out.println("PASS: Robot availability");
 
@@ -148,7 +157,7 @@ public class SimulationTest {
         ArrayList<Robot> multiRobots = new ArrayList<>();
 
         Robot robotA = new Robot(
-            10, new Coordinate(0, 0)
+            10, new Coordinate(1, 1)
         );
         Robot robotB = new Robot(
             11, new Coordinate(3, 3)
@@ -177,8 +186,8 @@ public class SimulationTest {
 
         multiSimulation.step();
 
-        check("ASSIGNED".equals(taskA.getStatus()),
-              "Task A should be assigned");
+        check("PICKED_UP".equals(taskA.getStatus()),
+            "Task A should be picked up at its starting location");
         check("ASSIGNED".equals(taskB.getStatus()),
               "Task B should be assigned");
 
@@ -190,32 +199,31 @@ public class SimulationTest {
         System.out.println("PASS: Multiple task assignment");
 
         // TEST 8: Independent pickup and delivery
-        robotA.setPosition(new Coordinate(1, 1));
-        multiSimulation.step();
 
-        check("PICKED_UP".equals(taskA.getStatus()),
-              "Task A should be picked up");
-        check("ASSIGNED".equals(taskB.getStatus()),
-              "Task B should still be assigned");
+        // Let both robots move automatically until both tasks finish
+        int maxTicks = 30;
 
-        robotA.setPosition(new Coordinate(2, 2));
-        robotB.setPosition(new Coordinate(4, 4));
-        multiSimulation.step();
+        while (
+            (!"COMPLETED".equals(taskA.getStatus()) ||
+            !"COMPLETED".equals(taskB.getStatus()))
+            && multiSimulation.getTickCount() < maxTicks
+        ) {
+            multiSimulation.step();
+        }
 
         check("COMPLETED".equals(taskA.getStatus()),
-              "Task A should be completed");
-        check("PICKED_UP".equals(taskB.getStatus()),
-              "Task B should be picked up");
-
-        robotB.setPosition(new Coordinate(5, 5));
-        multiSimulation.step();
+            "Task A should be completed");
 
         check("COMPLETED".equals(taskB.getStatus()),
-              "Task B should be completed");
+            "Task B should be completed");
 
         check("IDLE".equals(robotA.getStatus())
-              && "IDLE".equals(robotB.getStatus()),
-              "Both robots should be idle");
+            && "IDLE".equals(robotB.getStatus()),
+            "Both robots should be idle");
+
+        check(robotA.getBatteryLevel() < 100 ||
+            robotB.getBatteryLevel() < 100,
+            "At least one robot should consume battery while moving");
 
         System.out.println("PASS: Independent task progression");
 
@@ -259,8 +267,48 @@ public class SimulationTest {
 
         System.out.println("PASS: No assignment with empty battery");
 
+        // TEST 10: Robot collision prevention
+        Warehouse collisionWarehouse = new Warehouse(10, 10);
+        MovementController collisionMovement = new MovementController();
+
+        Robot collisionRobotA = new Robot(
+            30, new Coordinate(3, 3)
+        );
+
+        Robot collisionRobotB = new Robot(
+            31, new Coordinate(3, 4)
+        );
+
+        ArrayList<Robot> collisionRobots = new ArrayList<>();
+        collisionRobots.add(collisionRobotA);
+        collisionRobots.add(collisionRobotB);
+
+        ArrayList<Coordinate> collisionRoute = new ArrayList<>();
+        collisionRoute.add(new Coordinate(3, 4));
+
+        collisionRobotA.setCurrentRoute(collisionRoute);
+
+        boolean collisionMove = collisionMovement.moveOneStep(
+            collisionRobotA,
+            new Coordinate(3, 4),
+            collisionWarehouse,
+            collisionRobots
+        );
+
+        check(!collisionMove,
+            "Robot should not move into an occupied cell");
+
+        check(collisionRobotA.getPosition().getRow() == 3
+            && collisionRobotA.getPosition().getCol() == 3,
+            "Robot should remain in its original position");
+
+        check(collisionRobotA.getBatteryLevel() == 100,
+            "Blocked movement should not consume battery");
+
+        System.out.println("PASS: Robot collision prevention");
+
         System.out.println(
-            "\nAll 9 simulation tests passed!"
+            "\nAll 10 simulation tests passed!"
         );
 
     }

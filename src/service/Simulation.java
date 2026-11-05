@@ -97,6 +97,54 @@ public class Simulation {
             return;
         }
 
+        // Determine where the robot needs to go
+Coordinate destination = null;
+
+if ("ASSIGNED".equals(task.getStatus())) {
+    destination = task.getStart();
+} else if ("PICKED_UP".equals(task.getStatus())) {
+    destination = task.getEnd();
+}
+
+// Move toward the destination if not already there
+if (destination != null && !isAtLocation(robot, destination)) {
+
+    ArrayList<Coordinate> route = movementController.findPath(
+        robot.getPosition(),
+        destination,
+        warehouse,
+        robots,
+        robot
+    );
+
+    if (route == null || route.isEmpty()) {
+        System.out.println(
+            "Robot " + robot.getId() +
+            " cannot find a route."
+        );
+        return;
+    }
+
+    robot.setCurrentRoute(route);
+
+    Coordinate nextPosition = route.get(0);
+
+    boolean moved = movementController.moveOneStep(
+        robot,
+        nextPosition,
+        warehouse,
+        robots
+    );
+
+    if (!moved) {
+        System.out.println(
+            "Robot " + robot.getId() +
+            " is blocked and will retry next tick."
+        );
+        return;
+    }
+}
+
         // Pickup stage
         if ("ASSIGNED".equals(task.getStatus())) {
             if (isAtLocation(robot, task.getStart())) {
