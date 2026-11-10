@@ -15,7 +15,7 @@ public class Main {
         // Begin a loop to return to menu after each selection (until the selection is 0)
         do {
             // Print menu title
-            System.out.println("Campus Event Management System\n");
+            System.out.println("Robotic Warehouse Management System\n");
 
             // Print menu
             System.out.print("1. Start/Restart Simulation\n" + "2. Create New Task\n" + "3. Advance Time\n" + "4. View Robots\n"
