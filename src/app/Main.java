@@ -31,13 +31,15 @@ public class Main {
                 }
 
                 case 2: {
-                    // needs int TaskID Coordinate start Coordinate end
-                    //int newTaskId = readInt(input, "Enter Task ID: ", 1000, 9999);
+                    // needs Coordinate start Coordinate end
+                    int newTaskId = readInt(input, "Enter Task ID: ", 1000, 9999);
 
-                    //if (taskSystem.findTaskById(newTaskId) != null) {
-                        //System.out.println("Task ID already exists.\n");
-                        //break;   
-                    //}
+                    if (taskSystem.findTaskById(newTaskId) != null) {
+                        System.out.println("Task ID already exists.\n");
+                        break;   
+                    }
+
+                     
                 }
 
                 case 3: {
@@ -45,11 +47,13 @@ public class Main {
                 }
 
                 case 4: {
-                    // view robots
+                    // need: figure out how to print info from all robot
+                    // myRobot.printRobot();
+                    // System.out.println();
                 }
 
                 case 5: {
-                    // view tasks
+                    // view tasks goes here
                 }
 
         // When the user enters 0, the menu loop is exited.
