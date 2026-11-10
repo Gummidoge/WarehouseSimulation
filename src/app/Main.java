@@ -9,6 +9,55 @@ import java.util.ArrayList;
 public class Main {
     public static void main(String[] args) {
 
+        // Initialize an int to hold the user's menu selections
+        int menuSelect = 1;
+
+        // Begin a loop to return to menu after each selection (until the selection is 0)
+        do {
+            // Print menu title
+            System.out.println("Campus Event Management System\n");
+
+            // Print menu
+            System.out.print("1. Start/Restart Simulation\n" + "2. Create New Task\n" + "3. Advance Time\n" + "4. View Robots\n"
+                            + "5. View Tasks\n" + "0. Exit\n\n");
+
+            // User input check (using helper function readInt() at the bottom of main)
+            menuSelect = readInt(input, "Enter selection: ", 0, 5);
+
+            switch (menuSelect) {
+                case 1: {
+                    // placeholder, start or restart sim code goes here
+                    break;
+                }
+
+                case 2: {
+                    // needs int TaskID Coordinate start Coordinate end
+                    //int newTaskId = readInt(input, "Enter Task ID: ", 1000, 9999);
+
+                    //if (taskSystem.findTaskById(newTaskId) != null) {
+                        //System.out.println("Task ID already exists.\n");
+                        //break;   
+                    //}
+                }
+
+                case 3: {
+                    // Advance time goes here
+                }
+
+                case 4: {
+                    // view robots
+                }
+
+                case 5: {
+                    // view tasks
+                }
+
+        // When the user enters 0, the menu loop is exited.
+        } while (menuSelect != 0);
+
+        System.out.println();   // Print newline for spacing
+
+
         // **TEMPORARY TESTING CODE**
         // Create robot with id 1 and position 1,1
         Coordinate myCoordinate = new Coordinate(1, 1);
