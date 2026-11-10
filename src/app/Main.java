@@ -87,4 +87,30 @@ public class Main {
         // **TEMPORARY TESTING CODE**
 
     }
+        private static int readInt(
+        Scanner input, String prompt, int min, int max) {
+
+        while (true) 
+            {
+            System.out.print(prompt);
+
+            if (!input.hasNextInt()) 
+                {
+                    System.out.println("Please enter a valid integer value.");
+                    input.next(); 
+                    continue;
+                }
+
+            int value = input.nextInt();
+
+            if (value >= min && value <= max) 
+                {
+                    input.nextLine(); 
+                    return value;
+                }
+
+            System.out.println("Enter a number from " + min + " to " + max + ".");
+            }
+        }        
+    }
 }
