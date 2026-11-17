@@ -26,7 +26,9 @@ public class Main {
 
             switch (menuSelect) {
                 case 1: {
-                    // placeholder, start or restart sim code goes here
+                    Warehouse myFirstWarehouse = new Warehouse(8, 12);
+                    System.out.println("\n Initializing an empty warehouse: \n");
+                    myFirstWarehouse.printMap();
                     break;
                 }
 
@@ -37,23 +39,41 @@ public class Main {
                     if (taskSystem.findTaskById(newTaskId) != null) {
                         System.out.println("Task ID already exists.\n");
                         break;   
-                    }
+                    } 
+                    else 
+                    {   
+                        int newXAxis = readInt(input, "Enter starting x-axis : ", 0, 8);
+                        int newYAxis = readInt(input, "Enter starting y-axis : ", 0, 12);
 
+                        Coordinate myStartCoordinate = new Coordinate(newXAxis, newYAxis);
+
+                        newXAxis = readInt(input, "Enter ending x-axis : ", 0, 8);
+                        newYAxis = readInt(input, "Enter ending y-axis : ", 0, 12);
+
+                        Coordinate myEndCoordinate = new Coordinate(newXAxis, newYAxis);
+
+                        Task newTask = new Task(newTaskId, myStartCoordinate, myEndCoordinate);
+
+                        TaskManager.addTask(newTask);
+                    }
+                    
                      
                 }
 
                 case 3: {
-                    // Advance time goes here
+                    simulation.step();
                 }
 
                 case 4: {
-                    // need: figure out how to print info from all robot
-                    // myRobot.printRobot();
-                    // System.out.println();
+                    // maybe this works
+                    myRobot.printRobot();
+                    System.out.println();
                 }
 
                 case 5: {
-                    // view tasks goes here
+                    // same for this one
+                    currentTask.printTask();
+                    System.out.println();
                 }
 
         // When the user enters 0, the menu loop is exited.
