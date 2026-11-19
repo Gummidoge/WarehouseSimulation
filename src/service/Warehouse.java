@@ -1,10 +1,14 @@
 package service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import model.Coordinate;
 import model.Tile;
 // import model.ChargingTile;
 // import model.DeliveryTile;
 import model.FloorTile;
+import model.Robot;
 // import model.PickupTile;
 import model.WallTile;
 
@@ -140,11 +144,44 @@ public class Warehouse {
     }
 
 
-    // Print - displays the current warehouse setup to the console
-    public void printMap() {
+    // Given a type of tile, searches the warehouse for all tiles of that type,
+    // then returns a list of the coordinates where tiles of that type were found.
+    public List<Coordinate> findTiles(Class<? extends Tile> tileType) {
+        List<Coordinate> locations = new ArrayList<>();
+
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
-                System.out.print(map[row][col].getDisplayCharacter() + " ");
+                // If the tile at the current loaction matches the type being
+                // searched, add it to the array list and continue
+                if (tileType.isInstance(map[row][col])) {
+                    locations.add(new Coordinate(row, col));
+                }
+            }
+        }
+        return locations;
+    }
+
+    // Print - displays the current warehouse setup to the console, including robots
+    public void printMap(List<Robot> robots) {
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                boolean robotPresent = false;
+
+                // Given the current tile in the loop, iterate through the list of robots.
+                for (Robot robot : robots) {
+                    Coordinate position = robot.getPosition();
+
+                    // If any robot's position matches this tile, print it and set robotPresent to true.
+                    if (position.getRow() == row && position.getCol() == col) {
+                        System.out.print(robot.getId() + " ");  // Use robot's ID to represent it on the grid
+                        robotPresent = true;
+                        break;  // Continue to next tile on the grid
+                    }
+                }
+                // Otherwise, if no robot is present, print the warehouse tile as usual
+                if (!robotPresent) {
+                    System.out.print(map[row][col].getDisplayCharacter() + " ");
+                }
             }
             System.out.println();
         }

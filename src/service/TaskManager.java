@@ -92,4 +92,17 @@ public class TaskManager {
 
         return null;
     }
+
+    // Print all tasks to the console
+    public void displayAllTasks() {
+        if (tasks.isEmpty()) {
+			System.out.println("No tasks found.");
+			return;
+		}
+
+        for (Task task : tasks) {
+            task.printTask();
+            System.out.println("--------------------");
+        }
+    }
 }
