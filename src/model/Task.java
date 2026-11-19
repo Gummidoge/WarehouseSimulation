@@ -2,25 +2,25 @@ package model;
 
 public class Task {
     private final int id;
-    private final Coordinate start;
-    private final Coordinate end;
+    private final Coordinate pickup;
+    private final Coordinate delivery;
     private String status;
     private Robot assignedRobot;
 
     // Create a pending task with no robot assigned
-    public Task(int id, Coordinate start, Coordinate end) {
+    public Task(int id, Coordinate pickup, Coordinate delivery) {
         if (id < 0) {
             throw new IllegalArgumentException("Task ID cannot be negative.");
         }
-        if (start == null || end == null) {
+        if (pickup == null || delivery == null) {
             throw new IllegalArgumentException(
                 "Pickup and delivery locations cannot be null."
             );
         }
 
         this.id = id;
-        this.start = start;
-        this.end = end;
+        this.pickup = pickup;
+        this.delivery = delivery;
         this.status = "PENDING";
         this.assignedRobot = null;
     }
@@ -30,12 +30,12 @@ public class Task {
         return id;
     }
 
-    public Coordinate getStart() {
-        return start;
+    public Coordinate getPickup() {
+        return pickup;
     }
 
-    public Coordinate getEnd() {
-        return end;
+    public Coordinate getDelivery() {
+        return delivery;
     }
 
     public String getStatus() {
@@ -63,13 +63,13 @@ public class Task {
 
     // Print the task's information
     public void printTask() {
-        System.out.println("-----Information for Task " + id + "-----");
+        System.out.println("----- Information for Task " + id + " -----");
         System.out.println("ID: " + id);
         System.out.println(
-            "Pickup location: " + start.getRow() + "," + start.getCol()
+            "Pickup location: " + pickup.getRow() + "," + pickup.getCol()
         );
         System.out.println(
-            "Delivery location: " + end.getRow() + "," + end.getCol()
+            "Delivery location: " + delivery.getRow() + "," + delivery.getCol()
         );
         System.out.println("Status: " + status);
 

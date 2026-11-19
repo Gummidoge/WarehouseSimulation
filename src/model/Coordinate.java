@@ -28,4 +28,15 @@ public class Coordinate {
     public int getCol() {
         return col;
     }
+
+    // Compare two Coordinate objects by their row and column values
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Coordinate)) return false;
+
+        Coordinate other = (Coordinate) obj;
+
+        return row == other.row && col == other.col;
+    }
 }
