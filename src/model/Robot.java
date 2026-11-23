@@ -118,7 +118,7 @@ public class Robot {
 
     // Print all of a robot's information
     public void printRobot() {
-        System.out.println("-----Information for Robot " + id + "-----\n");
+        System.out.println("----- Information for Robot " + id + " -----");
 
         System.out.println("ID: " + id);
         System.out.println("Current Position: " + position.getRow() + "," + position.getCol());
@@ -129,23 +129,32 @@ public class Robot {
         if (currentTask == null) {
             System.out.println("Current task: None");
         }
-        // Else, print the id of the current assigned task
+        // Else, print the ID of the current assigned task
         else {
-            System.out.println("WIP - print the robot's assigned task id");
-            // System.out.println("Current task: " + currentTask.getId());
+            System.out.println("Current task: " + currentTask.getId());
         }
 
         // If no current route, display no destination
         if (currentRoute.isEmpty()) {
             System.out.println("Current destination: None");
         }
-        // Else, display the last element in the list as the destination
+        // If the robot has no task, it must be moving to a charging station
+        else if (currentTask == null) {
+            Coordinate destination = currentRoute.get(currentRoute.size() - 1);
+            System.out.println("Current destination: " + destination.getRow()
+                                                 + "," + destination.getCol());
+        }
+        // If the task is picked up, the robot is delivering it
+        else if ("PICKED_UP".equals(currentTask.getStatus())) {
+            Coordinate deliveryCoordinate = currentTask.getDelivery();
+            System.out.println("Current destination: " + deliveryCoordinate.getRow()
+                                                 + "," + deliveryCoordinate.getCol());
+        }
+        // Otherwise, the robot is picking up the task
         else {
-        Coordinate destination = currentRoute.get(currentRoute.size() - 1);
-
-        System.out.println("Current destination: "
-            + destination.getRow() + ","
-            + destination.getCol());
+            Coordinate pickupCoordinate = currentTask.getPickup();
+            System.out.println("Current destination: " + pickupCoordinate.getRow()
+                                                 + "," + pickupCoordinate.getCol());
         }
     }
 }
