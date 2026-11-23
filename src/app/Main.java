@@ -21,35 +21,39 @@ public class Main {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
 
-        // Initialize a 6x6 warehouse, has a perimeter of walls by default
-        Warehouse warehouse = new Warehouse(10, 10);
+        // Initialize an 11x12 warehouse, has a perimeter of walls by default
+        Warehouse warehouse = new Warehouse(11, 12);
 
         // Set tiles in the warehouse here as desired. Create delivery, pickup, etc. locations.
         // This section may possibly be changed to load from a file if we add persistence.
         warehouse.setTile(new Coordinate(1,4), new PickupTile());
         warehouse.setTile(new Coordinate(1,6), new PickupTile());
         warehouse.setTile(new Coordinate(1,8), new PickupTile());
+        warehouse.setTile(new Coordinate(1, 10), new PickupTile());
         warehouse.setTile(new Coordinate(4,8), new PickupTile());
 
-        warehouse.setTile(new Coordinate(8,1), new DeliveryTile());
-        warehouse.setTile(new Coordinate(8,4), new DeliveryTile());
-        warehouse.setTile(new Coordinate(8,8), new DeliveryTile());
+        warehouse.setTile(new Coordinate(9,1), new DeliveryTile());
+        warehouse.setTile(new Coordinate(9,4), new DeliveryTile());
+        warehouse.setTile(new Coordinate(9,7), new DeliveryTile());
+        warehouse.setTile(new Coordinate(9,10), new DeliveryTile());
 
-        warehouse.setTile(new Coordinate(1,1), new ChargingTile());
         warehouse.setTile(new Coordinate(4,1), new ChargingTile());
+        warehouse.setTile(new Coordinate(4,10), new ChargingTile());
 
         warehouse.setTile(new Coordinate(1,3), new WallTile());
         warehouse.setTile(new Coordinate(2,3), new WallTile());
         warehouse.setTile(new Coordinate(5,1), new WallTile());
         warehouse.setTile(new Coordinate(5,2), new WallTile());
         warehouse.setTile(new Coordinate(5,3), new WallTile());
-        warehouse.setTile(new Coordinate(5,6), new WallTile());
+        warehouse.setTile(new Coordinate(5,4), new WallTile());
         warehouse.setTile(new Coordinate(5,7), new WallTile());
         warehouse.setTile(new Coordinate(5,8), new WallTile());
-        warehouse.setTile(new Coordinate(7,3), new WallTile());
-        warehouse.setTile(new Coordinate(7,6), new WallTile());
+        warehouse.setTile(new Coordinate(5,9), new WallTile());
+        warehouse.setTile(new Coordinate(5, 10), new WallTile());
         warehouse.setTile(new Coordinate(8,3), new WallTile());
-        warehouse.setTile(new Coordinate(8,6), new WallTile());
+        warehouse.setTile(new Coordinate(8,8), new WallTile());
+        warehouse.setTile(new Coordinate(9,3), new WallTile());
+        warehouse.setTile(new Coordinate(9,8), new WallTile());
 
         // Initialize the rest of the management objects
         TaskManager taskManager = new TaskManager();
@@ -83,28 +87,34 @@ public class Main {
 
             // Print menu
             System.out.println("--- User Menu ---\n");
-            System.out.print("1. Advance Time\n" + "2. Create New Task\n" + "3. View Tasks\n"
-                            + "4. View Robots\n" + "5. Restart Simulation\n" + "0. Exit\n\n");
+            System.out.print("1. Advance 1 Tick\n" + "2. Advance Multiple Ticks\n" + "3. Create New Task\n"
+                           + "4. View Tasks\n" + "5. View Robots\n" + "6. Restart Simulation\n" + "0. Exit\n\n");
 
             // User input check (using helper function readInt() at the bottom of main)
-            menuSelect = readInt(input, "Enter selection: ", 0, 5);
+            menuSelect = readInt(input, "Enter selection: ", 0, 6);
 
             switch (menuSelect) {
-                // 1. Advance Time
+                // 1. Advance 1 Tick
                 case 1: {
-                    System.out.println("\nAdvance Time Selected.");
+                    System.out.println("\nAdvancing 1 tick.");
+                    simulation.step();
+                    break;
+                }
+                // 2. Advance Multiple Ticks
+                case 2: {
+                    System.out.println("\nAdvance Multiple Ticks Selected.");
                     System.out.println("How many ticks would you like to advance the simulation?");
                     int ticksToAdvance = readInt(input, "# of ticks: ", 1, 999);
                     // Loop that many times, do a step each time
                     for (int i = 0; i < ticksToAdvance; i++) {
                         simulation.step();  // Perform all relevant function calls for a tick passing
                     }
-                    System.out.println("Advanced " + ticksToAdvance + " ticks.");
-                    continue;   // Immediately continue to next menu loop
+                    System.out.println("Advanced " + ticksToAdvance + " tick(s).");
+                    break;
                 }
 
-                // 2. Create a New Task
-                case 2: {
+                // 3. Create a New Task
+                case 3: {
                     System.out.println("\nCreate New Task Selected.\n");
 
                     // Prompt user for task ID, must be a 4 digit int
@@ -182,23 +192,24 @@ public class Main {
                     break;
                 }
 
-                // 3. View Tasks
-                case 3: {
+                // 4. View Tasks
+                case 4: {
                     System.out.println("Displaying all current tasks.\n");
                     taskManager.displayAllTasks();
                     break;
                 }
 
-                // 4. View Robots
-                case 4: {
+                // 5. View Robots
+                case 5: {
                     System.out.println("Displaying all current robots.\n");
                     simulation.displayAllRobots();
                     break;
                 }
 
-                // 5. Reset Simulation
-                case 5: {
-                    System.out.println("WIP - Reset simulation selected.");
+                // 6. Reset Simulation
+                case 6: {
+                    System.out.println("\nRestarting simulation...");
+                    simulation.restart();
                     break;
                 }
             }

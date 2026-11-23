@@ -7,10 +7,10 @@ public class Coordinate {
     // Constructor
     public Coordinate(int row, int col) {
         // Validate parameters
-        if (row < 0) {  // Add in later: OR row is larger than warehouse width
+        if (row < 0) {  // Ensure row is not a negative value
             throw new IllegalArgumentException("Invalid row number.");
         }
-        if (col < 0) {  // Add in later: OR col is larger than warehouse height
+        if (col < 0) {  // Ensure col is not a negative value
             throw new IllegalArgumentException("Invalid column number.");
         }
 
