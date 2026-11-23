@@ -6,6 +6,7 @@ import java.util.ArrayList;
 public class Robot {
     private int id;
     private Coordinate position;
+    private final Coordinate startingPosition;
     private int batteryLevel;
     private Task currentTask;
     private List<Coordinate> currentRoute;
@@ -25,6 +26,7 @@ public class Robot {
         // Initialize id and position to given parameters
         this.id = id;
         this.position = position;
+        this.startingPosition = position;
         
         // Initialize everything else to a default state
         this.batteryLevel = 100;
@@ -67,7 +69,6 @@ public class Robot {
         return status;
     }
 
-    // Note: possibly change status setting to using an enum at some point
     public void setStatus(String status) {
         this.status = status;
     }
@@ -114,6 +115,15 @@ public class Robot {
     public void clearCurrentTask() {
         this.currentTask = null;
         this.currentRoute.clear();
+    }
+
+    // Reset all of a robot's information to default, and send it back to where it started
+    public void reset() {
+        position = startingPosition;
+        batteryLevel = 100;
+        currentTask = null;
+        currentRoute.clear();
+        status = "IDLE";
     }
 
     // Print all of a robot's information

@@ -93,6 +93,11 @@ public class TaskManager {
         return null;
     }
 
+    // Clear all tasks from the list
+    public void clearTasks() {
+        tasks.clear();
+    }
+
     // Print all tasks to the console
     public void displayAllTasks() {
         if (tasks.isEmpty()) {

@@ -271,4 +271,18 @@ public class Simulation {
             System.out.println("--------------------");
         }
     }
+
+    // Restart the simulation to it's initial state
+    public void restart() {
+        // Reset each robot
+        for (Robot robot : robots) {
+            robot.reset();
+        }
+        // Remove all tasks
+        taskManager.clearTasks();
+        // Reset tick counter
+        tickCount = 0;
+
+        System.out.println("Simulation successfully restarted.");
+    }
 }
