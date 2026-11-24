@@ -1,5 +1,111 @@
-# WarehouseSimulation
-A simulation of a small automated warehouse. Robots move through a warehouse, collect items from pickup locations, and deliver them to designated drop-off points. The system must demonstrate how robot behavior, warehouse conditions, and work assignments change over time.
+README
+(updated 11/23/2026)
+
+# Object-Oriented Programming Team Project | Warehouse Simulation
+
+## Project Overview
+
+A simulation of a small automated warehouse. Automated robots move through a warehouse, collect items from pickup locations, and deliver them to designated drop-off points. The system must demonstrate how robot behavior, warehouse conditions, and work assignments change over time.
+
+## Team Members  
+
+- Marina  
+- Audrey  
+- Swan  
+- Kyle  
+- Francisco  
+- Jason  
+
+The following is a generalized list of contributions from each student. It was very common for us to error check each other's code, resolve any outstanding issues, implement helper functions for each other, etc. 
+
+| Name | Primary Contributions |
+|---|---| 
+| Marina | Simulation and Simulation Test class designer, testing and feedback |
+| Audrey | Robot class designer, overall project management, testing and feedback |
+| Swan | Task and Task Manager designer |
+| Kyle | Main menu implementation |
+| Francisco | Movement Controller designer |
+| Jason | Warehouse and Tile class designer, documentation |
+
+
+## Features  
+
+Here is a list of some notable features:
+
+- Ability to sync and tie all warehouse actions to a unit of time.
+  - Multiple units of time can also be traversed at once, allowing for expedited shipping.
+- Customizable warehouse and tile placement (dev only).
+  - Examples include walls, charging stations, floors and delivery zones.
+- Ability to reset the warehouse, all tasks, and current robot locations back to its initial settings.
+- User option to create, queue, and observe different tasks for each robot, such as delivery pickups.
+- A coordinate system to assist in delegating orders to robots, tile placement, pathfinding validation, etc.
+- An autonomous navigation system to help robots reach their destinations efficiently.
+- Menu options to create new tasks, view current tasks, and view all robots' information.
+- Robust exception handling for user input and other potential program errors.
+
+## Class Design  
+
+Some of the more prominent classes used in the program are listed below. 
+
+| Class | Responsibility |
+|---|---| 
+| Coordinate | Allows an easy way to input, search, and view locations throughout the warehouse grid by using matrix-style coordinate notation. |
+| Tile (abstract) | Along with its tile-type subclasses, serve as the building blocks for the warehouse grid. Tiles include walls, floors, pick-up zones, drop-off zones, and charging stations. |
+| Robot | Creates a robot object that casually moves about the warehouse collecting and dropping off packages. Holds a unique ID number, position, battery level, task, and pathing route. Its status can also be printed to the console. |
+| Task | Creates a new task and assigns it to a robot. Tasks include picking up and dropping off packages at their respective locations. Each task has their own unique ID.  |
+| Movement Controller | Responsible for robot pathing throughout the warehouse. Checks if tiles can be traversed (i.e. no running through walls). Tries to find the simplest path possible to a destination. |
+| Simulation | Simulates all robots' movement and statuses while maneuvering the warehouse, such as charging, idling, task handling, and determining the next destination. Also in charge of the passage of time and the current "tick" count.  |
+| Simulation Test | Works in tandem with Simulation to handle edge cases, display error messages, and check that everything is running smoothly and correctly. |
+| Task Manager | In charge of queuing up and handing out tasks to robots, or storing them in a pending state for later use. Also able to print all available and pending tasks to the console. |
+| Warehouse | The program's 2D movement grid / floor plan. Can create a new map, modify existing tiles, find all locations of similar tiles, check that certain tiles are traversable, and print the current status of the warehouse map--including robot locations--to the console. |
+
+
+## Packages
+
+Our package layout closely follows what was recommended by our previous project's guide. 
+
+- App: Includes the `Main.java` file
+- Model: Holds all of the `Coordinate.java`, `Tile.java` (and its subclasses), `Task.java`, and `Robot.java` object data. 
+- Persistence: No saving or loading was required for this project, although if further expanded upon may prove useful.
+- Service: Holds the `Movement.java`, `Simulation.java`, `TaskManager.java`, and `Warehouse.java` files. 
+
+## Building  
+
+This specific project was built entirely in VS Code using that program's recommended Java extensions and add-ons, including a JDK. Note that an in-program pdf viewer is required to observe the project's UML diagram.  
+
+
+## Running  
+
+The program is run through a console menu user-interface; the following are options the user can select when presented with the main menu. Note that some of these options will prompt for additional information from the user.
+
+| # | Option | Description |
+|---|---|---|
+| 1 | Advance One Tick | Advances the simulation by 1 unit of time. All robot movement, current battery charge amounts, pending / assigned tasks, etc. are incremented during each time advance. |
+| 2 | Advance Multiple Ticks | Same as above, except advances the simulation by a desired unit of time; inputting '2' advances time by two units, for example. 
+| 3 | Create New Task | Creates a new task for a delivery robot to perform. The user can give the task an unique number ID as well as the coordinates for the pick-up and drop-off point (i.e. pickup and delivery tiles). |
+| 4 | View Tasks | Displays all current tasks. Tasks are classified as pending until an idle robot is available to actively start its delivery protocol. |
+| 5 | View Robots | Displays relevant info for each robot-- its ID number, current position, battery level, status, current task, and current destination. |
+| 6 | Restart Simulation | Resets all values, robot positions, tasks, etc. back to their original values when first opening the program. |
+| 0 | Exit | Terminates the program. |  
+
+## Notable Design Decisions and Feedback
+
+Some miscellaneous notes: 
+- The very first thing that sprang to mind when our team brainstormed this project was to create a 2D grid / array to represent the warehouse floor. Most of our other class design decisions were based heavily with this in mind, allowing for a more manageable workflow.
+- Brainstorming big projects like this in general is immensely helpful, and to keep everyone on the same page.
+- Representing Tile as an abstract class was a good idea and helped with code readability and conciseness.
+- Once again, we decided to follow most of the guidelines illustrated in our first class project instruction packet (package layout, workflow responsibilities, etc.), and it again worked out nicely. Organizing the initial package layout in particular is quite handy (i.e. app, model, service).
+- The team is becoming more accustomed to using Git and GitHub effectively.
+
+## Known Limitations  
+
+- It's possible that 2 robots could get hung up on each other when each one passes nearby. We have yet to institute a fix, but we are aware of the problem!
+- Other than that, there aren't any other issues that we can think of.
+
+Thanks for reading!  
+
+
+# Bonus: Original Brainstorm Notes
 
 ## Preliminary Ideas / Brainstorming
 Nothing here is final and is open to revisions; suggestions welcome!  
@@ -65,5 +171,3 @@ Nothing here is final and is open to revisions; suggestions welcome!
 - Eventually, persistence may be implemented to assist with testing, but it is not necessary for the assignment by any means. The file manager class was added to the uml for now, but it is low priority until we get a running program to actually test.
 
 - Also we should add the readInt helper function Jason wrote at the bottom of Main here as well, to help with the user adding tasks, potentially advancing multiple ticks, or other features we may add
-
-- Updated 10/26/2026
