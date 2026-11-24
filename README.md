@@ -23,7 +23,7 @@ The following is a generalized list of contributions from each student. It was v
 | Marina | Simulation and Simulation Test class designer, testing and feedback |
 | Audrey | Robot and Coordinate class designer, overall project management, testing and feedback |
 | Swan | Task and Task Manager designer |
-| Kyle | Main menu implementation |
+| Kyle | Main menu implementation, documentation |
 | Francisco | Movement Controller designer |
 | Jason | Warehouse and Tile class designer, documentation |
 
