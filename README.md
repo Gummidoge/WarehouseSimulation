@@ -21,7 +21,7 @@ The following is a generalized list of contributions from each student. It was v
 | Name | Primary Contributions |
 |---|---| 
 | Marina | Simulation and Simulation Test class designer, testing and feedback |
-| Audrey | Robot class designer, overall project management, testing and feedback |
+| Audrey | Robot and Coordinate class designer, overall project management, testing and feedback |
 | Swan | Task and Task Manager designer |
 | Kyle | Main menu implementation |
 | Francisco | Movement Controller designer |
@@ -50,7 +50,7 @@ Some of the more prominent classes used in the program are listed below.
 | Class | Responsibility |
 |---|---| 
 | Coordinate | Allows an easy way to input, search, and view locations throughout the warehouse grid by using matrix-style coordinate notation. |
-| Tile (abstract) | Along with its tile-type subclasses, serve as the building blocks for the warehouse grid. Tiles include walls, floors, pick-up zones, drop-off zones, and charging stations. |
+| Tile (abstract) | Along with its tile-type subclasses, serves as the building blocks for the warehouse grid. Tiles include walls, floors, pick-up zones, drop-off zones, and charging stations. |
 | Robot | Creates a robot object that casually moves about the warehouse collecting and dropping off packages. Holds a unique ID number, position, battery level, task, and pathing route. Its status can also be printed to the console. |
 | Task | Creates a new task and assigns it to a robot. Tasks include picking up and dropping off packages at their respective locations. Each task has their own unique ID.  |
 | Movement Controller | Responsible for robot pathing throughout the warehouse. Checks if tiles can be traversed (i.e. no running through walls). Tries to find the simplest path possible to a destination. |
@@ -112,7 +112,7 @@ Nothing here is final and is open to revisions; suggestions welcome!
 
 - A simulation class to manage the general operations of each "tick"
   -Essentially, our program wants to run on "ticks", and a variety of things must be attempted in each tick. The user should be able to observe the results after each tick. Further into development, we may add a way to advance more than one tick at a time.
-  - Members inlude the warehouse object, task manager object, movement controller object, and a list of the robots.
+  - Members include the warehouse object, task manager object, movement controller object, and a list of the robots.
   - For each "tick", operations such as these are performed:
     -Check if any tasks are currently pending
     -If any tasks are pending, attempt to assign them to an available robot
